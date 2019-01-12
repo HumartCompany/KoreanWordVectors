@@ -1,10 +1,10 @@
-# Word Vector Representation for Korean: Evaluation Set
+# Word Vector Representation for Korean
 **Subword-level Word Vector Representations for Korean**<br/>
 *Sungjoon Park, Jeongmin Byun, Sion Baek, Yongseok Cho, Alice Oh*<br/>
 *Proceedings of the 56th Annual Meeting of the Association for Computational Linguistics (ACL 2018)*<br/>
 
 ## Abstract
-Research on distributed word representations is focused on widely-used languages such as English. Although the same methods can be used for other languages, language-specific knowledge can enhance the accuracy and richness of word vector representations. In this paper, we look at improving distributed word representations for Korean using knowledge about the unique linguistic structure of Korean. Specifically, we decompose Korean words into the jamo-level, beyond the character-level, allowing a systematic use of subword information. To evaluate the vectors,w e develop Korean test sets for word similarity and analogy and make them publicly available. The results show that our simple method outperforms word2vec and character-level Skip-Grams on semantic and syntactic similarity and analogy tasks and contributes positively toward down-stream NLP tasks such as sentiment analysis.
+Research on distributed word representations is focused on widely-used languages such as English. Although the same methods can be used for other languages, language-specific knowledge can enhance the accuracy and richness of word vector representations. In this paper, we look at improving distributed word representations for Korean using knowledge about the unique linguistic structure of Korean. Specifically, we decompose Korean words into the jamo-level, beyond the character-level, allowing a systematic use of subword information. To evaluate the vectors, we develop Korean test sets for word similarity and analogy and make them publicly available. The results show that our simple method outperforms word2vec and character-level Skip-Grams on semantic and syntactic similarity and analogy tasks and contributes positively toward down-stream NLP tasks such as sentiment analysis.
 
 
 ## Dataset
@@ -59,18 +59,24 @@ Then, you can train subword-level word vectors for Korean. The source code depen
 ```
 The full list of parameters are given below.
 ```
--minCount 		minimal number of word occurences
--minCountLabel 	minimal number of label occurences
--wordNgrams 	max length of word ngram
--bucket 		number of buckets
--minn 			min length of char ngram [1]
--maxn 			max length of char ngram [4]
--minjn 			min length of jamo ngram [3]
--maxjn 			max length of jamo ngram [5]
--emptyjschar 	empty jongsung symbol ["e"]
--t  			sampling threshold
--label 			labels prefix
+-minCount : minimal number of word occurences [5]
+-bucket : number of buckets [10000000]
+-minn : min length of char ngram [1]
+-maxn : max length of char ngram [4]
+-minjn : min length of jamo ngram [3]
+-maxjn : max length of jamo ngram [5]
+-emptyjschar : empty jongsung symbol ["e"]
+-t : sampling threshold [1e-4]
+-lr : learning rate [0.05]
+-dim : size of word vectors [100]
+-ws : size of the context window [5]
+-loss : loss function {ns, hs, softmax} [softmax]
+-neg : number of negatives sampled [5]
+-epoch : number of epochs [5]
+-thread : number of threads [12]
+-verbose : verbosity level [2]
 ```
+As written in the paper, the default number of character-level n-grams is set to 1-4, and the number of jamo-level n-grams is set to 3-5. As the number of n-grams increases, you should adjust the number of maximum unique n-grams (bucket), otherwise some n-grams will be overridden. We recommend 10,000,000 for approximately 3GB of (parsed) Korean corpus.
 
 ### Constructing Korean OOV word vectors
 The trained output file `[output_file_name].bin` can be used to compute word vectors for OOVs. Provided you have a text file `queries.txt` containing Korean decomposed words for which you want to compute vectors, use the following command:
@@ -80,4 +86,5 @@ $ [fastText_executable_path] print-word-vectors model.bin < queries.txt
 Note that  `queries.txt` should contain decomposed Korean words, such as ㄱㅏㅇㅇㅏeㅈㅣe for 강아지. You can also use `jamo_split` method in `decompose_letters.py` to obtain decomposed Korean words.
 
 ## Change Log
+01-11-19 : Add implementations. version 1.0 
 05-04-18 : Initial upload of datasets. version 1.0
